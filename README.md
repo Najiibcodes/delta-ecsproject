@@ -1,3 +1,84 @@
+TM App - Open Source App Hosted on ECS with Terraform 🚀
+========================================================
+
+This project deploys the TM App, based on Amazon's [Threat Composer Tool](https://github.com/aws-samples/threat-composer), an open-source application for threat modeling and security assessments. The app is securely hosted at [https://najiib.co.uk](https://najiib.co.uk) on AWS ECS using Terraform, featuring an HTTPS-enabled architecture with AWS-managed resources for scalability, security, and resilience.
+
+Project Overview
+----------------
+
+The deployment is fully automated using Infrastructure as Code (IaC) with Terraform and follows containerization best practices with Amazon Elastic Container Registry (ECR) and Elastic Container Service (ECS). A GitHub Actions CI/CD pipeline handles continuous integration and deployment for a seamless workflow.
+
+### Key Features
+
+*   **Automated Infrastructure**: Terraform modules provision and manage AWS resources.
+    
+*   **Containerized Deployment**: App image built and stored in ECR.
+    
+*   **HTTPS Security**: Secure access to the app via SSL/TLS using ACM.
+    
+*   **Scalable Architecture**: Deployed on ECS with an Application Load Balancer (ALB) for load balancing.
+    
+
+Infrastructure Overview
+-----------------------
+
+This project utilizes the following AWS resources:
+
+*   **Amazon ECS**: Manages the TM app's containerized services.
+    
+*   **ALB (Application Load Balancer)**: Distributes HTTPS traffic securely to ECS tasks.
+    
+*   **Amazon Route 53**: Manages DNS and domain routing.
+    
+*   **AWS Certificate Manager (ACM)**: Manages SSL certificates for HTTPS.
+    
+
+### Project Architecture
+
+The infrastructure consists of a custom VPC, ECS Cluster, Security Groups, and ACM for TLS. Route 53 configures DNS to route traffic securely to the TM App hosted on ECS. (Refer to architecture\_diagram.png for details.)
+
+Deployment Instructions
+-----------------------
+
+### Prerequisites
+
+*   **AWS CLI** with necessary permissions
+    
+*   **Docker** for local containerization
+    
+*   **Terraform** to manage IaC
+    
+
+### Deployment Steps
+
+1.  bashCopy codegit clone cd
+    
+2.  bashCopy codedocker build -t tm-app .docker tag tm-app:latest /tm-app:latestdocker push /tm-app:latest
+    
+3.  bashCopy codeterraform initterraform apply
+    
+4.  **Access Application**:Visit [https://najiib.co.uk](https://najiib.co.uk) to access the live TM App.
+    
+
+Local Development
+-----------------
+
+1.  bashCopy codeyarn install
+    
+2.  bashCopy codeyarn buildserve -s build
+    
+3.  **Access Locally**:Open [http://localhost:3000/workspaces/default/dashboard](http://localhost:3000/workspaces/default/dashboard) to view the app locally.
+    
+
+CI/CD Pipeline
+--------------
+
+The GitHub Actions workflow automates CI/CD for this project. The main jobs include:
+
+*   **Docker Build & Push**: Builds and deploys images to ECR on main branch updates.
+    
+*   **Terraform Apply**: Applies infrastructure changes upon updates.
+
 ### Architecture Diagram 🚀
 
 ```mermaid
