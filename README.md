@@ -1,49 +1,61 @@
-<div align="center">
-    <img src="./images/coderco.jpg" alt="CoderCo" width="300"/>
-</div>
+### Architecture Diagram 🚀
 
-# CoderCo Assignment 1 - Open Source App Hosted on ECS with Terraform 🚀
+```mermaid
+flowchart TD
+    %% GitHub Actions CI/CD Pipeline with Local Testing
+    A["Create Repository"]
+    B["Checkout Code"]
+    C["Secrets Setup (AWS Access Key, Secret Key, Region)"]
+    D["Build Docker Image"]
+    E["Test Workflow Locally with Act"]
+    F["Push to ECR (Elastic Container Registry)"]
 
-This project is based on Amazon's Threat Composer Tool, an open source tool designed to facilitate threat modeling and improve security assessments. You can explore the tool's dashboard here: [Threat Composer Tool](https://awslabs.github.io/threat-composer/workspaces/default/dashboard)
+    subgraph CI/CD Pipeline
+        A --> B --> C --> D --> E --> F
+    end
 
-## Task/Assignment 📝
+    %% Terraform Resources
+    G{"Deploy with Terraform"}
+    
+    subgraph Terraform Modules
+        H["VPC Module (CIDR: 10.0.0.0/16)"]
+        I["Subnets Module (eu-west-2a & eu-west-2b)"]
+        J["Security Groups Module (ECS Security Group)"]
+        K["ALB Module (HTTPS Load Balancer)"]
+        L["ECS Cluster Module (tm-cluster)"]
+        M["Route 53 DNS Module (Domain Mapping)"]
+    end
+    
+    %% ECS & Load Balancer Deployment
+    N["ECS Task Definition (Family: threatmodel-task)"]
+    O["Application Load Balancer (HTTPS Endpoint)"]
 
-- Create your own repository and complete the task there. You may create a `app` in your repo and copy all the files in this directory into it. Or alternatively, you can use this directory as is. Your choice.
+    %% Connections and Dependencies
+    F --> G
+    G --> H
+    H --> I
+    I --> J
+    G --> K --> O
+    G --> L --> N
+    O --> M
 
-- Your task will be to create a container image for the app, push it to ECR (recommended) or DockerHub. Ideally, you should use a CI/CD pipeline to build, test, and push the container image.
+    %% Endpoints
+    M --> P["App Live on HTTPS Domain: www.teamdelta.com"]
 
-- Deploy the app on ECS using Terraform. All the resources should be provisioned using Terraform. Use TF modules.
-
-- Make sure the app is live on `https://tm.<your-domain>` or `https://tm.labs.<your-domain>`
-
-- App must use HTTPS. Hosted on ECS. Figure out the rest. Once app is live, add screenshots to the README.md file.
-
-- Add architecture diagram of how the infrastructure is setup. (Use Lucidchart or draw.io or mermaid) You are free to use any diagramming tool.
-
-## Local app setup 💻
-
-```bash
-yarn install
-yarn build
-yarn global add serve
-serve -s build
-
-#yarn start
-http://localhost:3000/workspaces/default/dashboard
-
-## or
-yarn global add serve
-serve -s build
-```
-
-## Useful links 🔗
-
-- [Terraform AWS Registry](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
-- [Terraform AWS ECS](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_cluster)
-- [Terraform Docs](https://www.terraform.io/docs/index.html)
-- [ECS Docs](https://docs.aws.amazon.com/ecs/latest/userguide/what-is-ecs.html)
-
-## Advice & Tips �
-
-- This is just a simple app, you may use another app if you'd like. 
-- Use best practices for your Terraform code. Use best practices for your container image. Use best practices for your CI/CD pipeline.
+%% Node Styling
+    style A color:#FFFFFF, fill:#007ACC, stroke:#007ACC
+    style B color:#FFFFFF, fill:#1E88E5, stroke:#1E88E5
+    style C color:#FFFFFF, fill:#8E24AA, stroke:#8E24AA
+    style D color:#FFFFFF, fill:#43A047, stroke:#43A047
+    style E color:#FFFFFF, fill:#795548, stroke:#795548
+    style F color:#FFFFFF, fill:#FF6F00, stroke:#FF6F00
+    style G color:#FFFFFF, fill:#6A1B9A, stroke:#6A1B9A
+    style H color:#FFFFFF, fill:#009688, stroke:#009688
+    style I color:#FFFFFF, fill:#4CAF50, stroke:#4CAF50
+    style J color:#FFFFFF, fill:#FFC107, stroke:#FFC107
+    style K color:#FFFFFF, fill:#FF5722, stroke:#FF5722
+    style L color:#FFFFFF, fill:#3F51B5, stroke:#3F51B5
+    style M color:#FFFFFF, fill:#CDDC39, stroke:#CDDC39
+    style N color:#FFFFFF, fill:#039BE5, stroke:#039BE5
+    style O color:#FFFFFF, fill:#AA00FF, stroke:#AA00FF
+    style P color:#FFFFFF, fill:#D32F2F, stroke:#D32F2F
